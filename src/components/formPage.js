@@ -26,7 +26,13 @@ function FormPage(){
         e.preventDefault();
 
         if(validate()){
-            navigate("/success", {state: { name }});
+            const newUser = {name,email};
+            const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+            const updatedUsers = [...storedUsers,newUser];
+            localStorage.setItem("users", JSON.stringify(updatedUsers));
+            console.log("Saved Users:", updatedUsers);
+            navigate("/success");
         }
     };
 
