@@ -1,67 +1,115 @@
 import React, { useState } from "react";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../firebase_config";
 import { useNavigate } from "react-router-dom";
 import "./form.css";
 
-function FormPage(){
-    const[name , setName] = useState("");
-    const[email, setEmail] = useState("");
-    const[errors, setErrors] = useState("");
+function FormPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [errors, setErrors] = useState("");
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const validate = () => {
-        let newErrors = {};
+  const validate = () => {
+    let newErrors = {};
 
-        if(!name.trim()){
-            newErrors.name= "Name is required";
-        }else if(!/\S+@\S+\.\S+/.test(email)){
-            newErrors.email = "Invalid email format";
-        }
+    if (!name.trim()) {
+      newErrors.name = "Name is required";
+    }
 
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+    if (!email.trim()) {
+      newErrors.email = "Name is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Invalid email format";
+    }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-        if(validate()){
-            const newUser = {name,email};
-            const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-            const updatedUsers = [...storedUsers,newUser];
-            localStorage.setItem("users", JSON.stringify(updatedUsers));
-            console.log("Saved Users:", updatedUsers);
-            navigate("/success");
-        }
-    };
+    if (validate()) {
+      const newUser = { name, email };
+      const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
 
-    return (
-        <div className="container">
-            <form className="form" onSubmit={handleSubmit}>
-                <h2>Students Data Sheet</h2>
+      const updatedUsers = [...storedUsers, newUser];
+      localStorage.setItem("users", JSON.stringify(updatedUsers));
+      console.log("Saved Users:", updatedUsers);
+      navigate("/success");
+    }
+  };
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
-         <div className= "input-group">
-            <label>Name</label>
-            <input type="text"
+      const newUser = {
+        name: user.displayName,
+        email: user.email,
+      };
+
+      const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+      if (storedUsers.some((u) => u.email === newUser.email)) {
+        alert("User already exists");
+        navigate("/success");
+        return;
+      }
+      const updatedUsers = [...storedUsers, newUser];
+      localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+      navigate("/success");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div className="container">
+      <form className="form" onSubmit={handleSubmit}>
+        <h2>Students Data Sheet</h2>
+
+        <div className="input-group">
+          <label>Name</label>
+          <input
+            type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            />
-         </div>
-
-         <div className="input-group">
-         
-         <label>Email</label>
-         <input
-         type="text"
-         value={email}
-         onChange={(e) => setEmail(e.target.value)}/></div>
-         {errors.email && <p className="error">{errors.email}</p>}
-          <button type="submit">Submit</button>
-            </form>
+          />
         </div>
-       
-    );
+
+        <div className="input-group">
+          <label>Email</label>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        {errors.email && <p className="error">{errors.email}</p>}
+        <button type="submit">Submit</button>
+        <p style={{ textAlign: "center", margin: "10px 0" }}> OR </p>
+        <button
+          type="button"
+          onClick={handleGoogleLogin}
+          style={{
+            marginTop: "10px",
+            backgroundColor: "black",
+            color: "white",
+            border: "none",
+            padding: "10px",
+            borderRadius: "5px",
+            width: "100%",
+          }}
+        >
+          Sign in with Google
+        </button>
+      </form>
+    </div>
+  );
 }
 
 export default FormPage;

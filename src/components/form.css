@@ -5,7 +5,8 @@ body {
 }
 
 .container{
-    height: 100vh;
+    min-height: 400vh;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,6 +17,7 @@ body {
     padding: 30px;
     border-radius: 10px;
     width: 300px;
+    overflow: visible;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -57,4 +59,18 @@ button:hover{
 .error{
     color: red;
     font-size: 12px;
+}
+
+.google-btn{
+   width: 100%;
+   padding: 10px;
+   background-color: black;
+   color: white;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+}
+
+.google-btn:hover{
+    background-color: #ccc;
 }

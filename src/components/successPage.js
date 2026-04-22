@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./success.css";
 
 function SuccessPage() {
   const [users, setUsers] = useState([]);
@@ -10,7 +11,6 @@ function SuccessPage() {
         const data = localStorage.getItem("users");
         const parsed = data ? JSON.parse(data) : [];
         setUsers(parsed);
-    setUsers(parsed);
     }catch(e){
         console.error("Invalid JSON , resetting");
         localStorage.removeItem("users");
@@ -26,10 +26,10 @@ function SuccessPage() {
         {users.length === 0 ? (
           <p>No Users yet</p>
         ) : (
-          <table style={{ width: "100%", marginTop: "20px" }}>
+          <table className="user-table">
             <thead>
               <tr>
-                <th>#</th>
+                <th>SNo</th>
                 <th>Name</th>
                 <th>Email</th>
               </tr>
