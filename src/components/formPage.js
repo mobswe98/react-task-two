@@ -7,7 +7,7 @@ import "./form.css";
 function FormPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -16,10 +16,12 @@ function FormPage() {
 
     if (!name.trim()) {
       newErrors.name = "Name is required";
+    } else if(name.trim().length <= 3){
+      newErrors.name = "Please enter a valid name";
     }
 
     if (!email.trim()) {
-      newErrors.email = "Name is required";
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Invalid email format";
     }
@@ -75,15 +77,19 @@ function FormPage() {
         <div className="input-group">
           <label>Name</label>
           <input
+            id="name"
+            name="name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-
+        {errors.name && <p className="error">{errors.name}</p>}
         <div className="input-group">
           <label>Email</label>
           <input
+            id="email"
+            name="email"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -95,15 +101,7 @@ function FormPage() {
         <button
           type="button"
           onClick={handleGoogleLogin}
-          style={{
-            marginTop: "10px",
-            backgroundColor: "black",
-            color: "white",
-            border: "none",
-            padding: "10px",
-            borderRadius: "5px",
-            width: "100%",
-          }}
+          className="google-btn"
         >
           Sign in with Google
         </button>

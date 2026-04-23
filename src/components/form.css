@@ -5,7 +5,7 @@ body {
 }
 
 .container{
-    min-height: 400vh;
+    min-height: 300vh;
     padding: 20px;
     display: flex;
     justify-content: center;
@@ -16,9 +16,9 @@ body {
     background: white;
     padding: 30px;
     border-radius: 10px;
-    width: 300px;
+    width: 600px;
     overflow: visible;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .form h2{
@@ -27,6 +27,8 @@ body {
 }
 
 .input-group{
+    flex-direction: column;
+    width: 100%;
     margin-bottom: 15px;
 }
 
@@ -37,9 +39,10 @@ body {
 
 .input-group input{
     width: 100%;
-    padding: 8px 8px;
+    padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    box-sizing: border-box;
 }
 
 button{
